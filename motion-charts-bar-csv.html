@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="de">
+
+
+<head>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #graph {
+      vertical-align: top;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="graph"></div>
+
+  <script>
+    // fetch the CSV tables and regroup the columns of data
+    Plotly.d3.csv('./product-bar.csv', function (err, data){
+
+
+        // first by year, then by continent: // create multi dimantional object then group objects by year 
+        
+        
+
+        class traces {
+          constructor(t, pb, at, pr, isb ){ 
+            this.title = t, 
+            this.publisher  = pb,  
+            this.author  = at,
+            this.price = pr,
+            this.isbn = isb
+        }
+
+
+        var lookup = {};
+        function getData(year, continent) {
+          var byYear, trace;
+          if (!(byYear = lookup[year]))  {;
+            byYear = lookup[year] = {};
+            console.log(lookup)
+            
+          }
+        // If a container for this year + continent doesn't exist yet,
+        // then create one:
+          if (!(trace = byYear[continent])) {
+            trace = byYear[continent] = {
+              x: [], // lifeExp
+              y: [], // gdpPercap
+              id: [], // country 
+              text: [], // country 
+              marker: {size: []} // this will create array of the population
+            };
+          // console.log(trace)
+          }
+          return trace;
+        }
+
+
+
+        
+
+        // Go through each row, get the right trace, and append the data:
+        for (var i = 0; i < data.length; i++) {
+          var datum = data[i];
+          var trace = getData(datum.year, datum.continent);
+          trace.text.push(datum.country);
+          trace.id.push(datum.country);
+          trace.x.push(datum.lifeExp);
+          trace.y.push(datum.gdpPercap);
+          trace.marker.size.push(datum.pop);
+        }
+
+
+
+    
+
+    Plotly.plot('graph', {
+    data: traces,
+    layout: layout,
+	 config: {showSendToCloud:true},
+    frames: frames,
+     });
+  }); 
+
+
+    Plotly.plot('graph', {
+      data: [{
+        x: ['p1', 'p2', 'p3', 'p4'],
+        y: [1, 7, 1, 1],
+        type: 'bar'
+       /*  line: {
+          color: 'green',
+          simplify: false,
+        } */
+      }],
+
+      layout: { //configuration
+        sliders: [{
+          pad: {
+            t: 20
+          },
+          x: 0.05,
+          len: 0.95,
+          currentvalue: {
+            xanchor: 'right',
+            prefix: 'Year: ',
+            font: {
+              color: '#888',
+              size: 30
+            }
+          },
+          transition: {
+            duration: 500
+          },
+
+          // By default, animate commands are bound to the most recently animated frame:
+
+          /////////
+          steps: [  ///steps - frames containeres
+            {
+            label: '2000', /// label of the changing frame at the momment color but should be year 
+            method: 'animate',
+            args: [
+              ['frame1'], {
+                mode: 'immediate',
+                frame: {
+                  redraw: false,
+                  duration: 500
+                },
+                transition: {
+                  duration: 500
+                }
+              }
+            ]
+          }
+         
+          , {
+            label: '2005',
+            method: 'animate',
+            args: [
+              ['frame2'], {
+                mode: 'immediate',
+                frame: {
+                  redraw: false,
+                  duration: 500
+                },
+                transition: {
+                  duration: 500
+                }
+              }
+            ]
+          }
+          
+          
+          , {
+            label: '2010',
+            method: 'animate',
+            args: [
+              ['frame3'], {
+                mode: 'immediate',
+                frame: {
+                  redraw: false,
+                  duration: 500
+                },
+                transition: {
+                  duration: 500
+                }
+              }
+            ]
+          }]
+        }],
+
+///////////////---  Control Bar ---////////////
+        updatemenus: [{
+          type: 'buttons',
+          showactive: false,
+          x: 0.05,
+          y: 0,
+          xanchor: 'right',
+          yanchor: 'top',
+          direction: 'left',
+          pad: {
+            t: 60,
+            r: 20
+          },
+
+          buttons: [{
+            label: 'Play',
+            method: 'animate',
+            args: [null, {
+              fromcurrent: true,
+              frame: {
+                redraw: false,
+                duration: 1000
+              },
+              transition: {
+                duration: 500
+              }
+            }]
+          }, {
+            label: 'Pause',
+            method: 'animate',
+            args: [
+              [null], {
+                mode: 'immediate',
+                frame: {
+                  redraw: false,
+                  duration: 0
+                }
+              }
+            ]
+          }]
+        }]
+      },
+
+      ///
+      // The slider itself does not contain any notion of timing, so animating a slider
+      // must be accomplished through a sequence of frames. Here we'll change the color
+      // and the data of a single trace:
+      frames: [{
+        name: 'frame1',
+        data: [{
+          y: [1, 1, 3, 4],
+          /* 'line.color': 'red' */
+        }]
+      }, {
+        name: 'frame2',
+        data: [{
+          y: [3, 2, 1, 3],
+          'line.color': 'green'
+        }]
+      }, {
+        name: 'frame3',
+        data: [{
+          y: [1, 3, 2, 3],
+          'line.color': 'blue'
+        }]
+      }]
+    }, {
+      showSendToCloud: true
+    });
+  </script>
+</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- { "greeting": "Willkommen in der Welt von JSON!" } -->
+
+
+ <!-- JSON:
+let titel_2 = ResultSet.Result[1].Title
+
+XML: (sicher)
+let titel_2 = xmlDoc.getElementsByTagName('Result').item(1).getElementsByTagName('Title').item(0).firstChild.nodeValue
+
+XML: (nur sicher wenn jedes Result genau einen Title enthält
+let titel_2 = xmlDoc.getElementsByTagName('Title').item(1).firstChild.nodeValue
+
+----------------------------------------------------------------------------
+
+JSON:
+let anzahl = ResultSet.totalResultsReturned
+
+XML:
+let anzahl = xmlDoc.getElementsByTagName('totalResultsReturned').item(0).firstChild.nodeValue -->
+
+<!-- var xmlhttp = new XMLHttpRequest(),
+  method = 'GET',
+  url = 'https://developer.mozilla.org/';
+
+xmlhttp.open(method, url, true);
+xmlhttp.onload = function () {
+  // Do something with the retrieved data ( found in xmlhttp.response )
+};
+xmlhttp.send();
+ -->

@@ -19,41 +19,74 @@
 
 <body>
   <div id="graph"></div>
-  <script>
-    Plotly.plot('graph', {
-      data: [{
-        x: [1, 2, 3],
-        y: [2, 1, 3],
-        line: {
-          color: 'red',
-          simplify: false,
-        }
-      }],
 
+  <script>
+
+    Plotly.d3.csv('./product-bar.csv', function(err, rows){
+
+  function unpack(rows, key) {
+  return rows.map(function(row) { return row[key]; });
+}
+
+    var trace1 = {
+      x: ['p1'],
+      y: unpack(rows, 'sells'),
+      
+        name: 'Sells',
+        type: 'bar'
+      };
+
+      var trace2 = {
+        x: ['p1'],
+        y: unpack(rows, 'costs'),
+        name: 'Costs',
+        type: 'bar'
+      };
+
+      var data = [trace1, trace2];
+
+
+    Plotly.plot('graph',  { data,
+
+
+
+  /*     data: [{
+        x: ['p1', 'p2', 'p3', 'p4'],
+        y: [1, 7, 1, 1],
+        type: 'bar'
+        line: {
+          color: 'green',
+          simplify: false,
+        } 
+      }],
+ */
       layout: {
         sliders: [{
           pad: {
-            t: 30
+            t: 20
           },
           x: 0.05,
           len: 0.95,
           currentvalue: {
             xanchor: 'right',
-            prefix: 'color: ',
+            prefix: 'Year: ',
             font: {
               color: '#888',
-              size: 20
+              size: 30
             }
           },
           transition: {
             duration: 500
           },
+
           // By default, animate commands are bound to the most recently animated frame:
+
+          /////////
           steps: [{
-            label: 'red',
+            label: '2000', /// label of the changing frame at the momment color but should be year 
             method: 'animate',
             args: [
-              ['red'], {
+              ['frame1'], {
                 mode: 'immediate',
                 frame: {
                   redraw: false,
@@ -64,11 +97,13 @@
                 }
               }
             ]
-          }, {
-            label: 'green',
+          }
+          
+          , {
+            label: '2005',
             method: 'animate',
             args: [
-              ['green'], {
+              ['frame2'], {
                 mode: 'immediate',
                 frame: {
                   redraw: false,
@@ -79,11 +114,14 @@
                 }
               }
             ]
-          }, {
-            label: 'blue',
+          }
+          
+          
+          , {
+            label: '2010',
             method: 'animate',
             args: [
-              ['blue'], {
+              ['frame3'], {
                 mode: 'immediate',
                 frame: {
                   redraw: false,
@@ -96,6 +134,8 @@
             ]
           }]
         }],
+
+///////////////---  Control Bar ---////////////
         updatemenus: [{
           type: 'buttons',
           showactive: false,
@@ -108,6 +148,7 @@
             t: 60,
             r: 20
           },
+
           buttons: [{
             label: 'Play',
             method: 'animate',
@@ -136,36 +177,69 @@
           }]
         }]
       },
+
+      ///
       // The slider itself does not contain any notion of timing, so animating a slider
       // must be accomplished through a sequence of frames. Here we'll change the color
       // and the data of a single trace:
+
+
+
+      
+
       frames: [{
-        name: 'red',
-        data: [{
-          y: [5, 1, 3],
-          'line.color': 'red'
-        }]
-      }, {
-        name: 'green',
-        data: [{
-          y: [3, 2, 1],
-          'line.color': 'green'
-        }]
-      }, { 
-        name: 'green',
-        data: [{
-          y: [3, 2, 1],
-          'line.color': 'green'
-        }]
-      }, {
-        name: 'blue',
-        data: [{
-          y: [1, 3, 2],
-          'line.color': 'blue'
-        }]
+        name: 'frame1',
+        data: [ {
+          x: ['p1', 'p2'],
+           y: [300, 200],
+          name: 'Sells',
+          type: 'bar'
+       }, {
+          x: ['p1', 'p2', 'p3', 'p4'],
+           y: [1, 3, 2, 3],
+          name: 'Costs',
+          type: 'bar'
+       }]
+      }, 
+       
+      
+      
+      {
+        name: 'frame2',
+        data: [ {
+          x: ['p1', 'p2', 'p3', 'p4'],
+           y: [1, 2, 1, 1],
+          name: 'Sells',
+          type: 'bar'
+       }, {
+          x: ['p1', 'p2', 'p3', 'p4'],
+           y: [1, 1, 2, 3],
+          name: 'Costs',
+          type: 'bar'
+       }]
+      }, 
+      
+      {
+        name: 'frame3',
+        data: [ {
+          x: ['p1', 'p2', 'p3', 'p4'],
+           y: [4, 4, 1, 1],
+          name: 'Sells',
+          type: 'bar'
+       }, {
+          x: ['p1', 'p2', 'p3', 'p4'],
+           y: [1, 4, 2, 2],
+          name: 'Costs',
+          type: 'bar'
+       }]
+
+
       }]
-    }, {
+    }, /// closing plotly.plot
+     {
       showSendToCloud: true
+    });
+
     });
   </script>
 </body>
@@ -176,7 +250,9 @@
 
 
 
-
+1. create item obj 
+2. item object should contain data ( sales & costs for every year )
+3. fetch the data and groupByYear how to create an array of sells/year costs/year 
 
 
 
