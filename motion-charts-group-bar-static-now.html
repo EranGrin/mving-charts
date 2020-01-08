@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+
+
+<head>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #graph {
+      vertical-align: top;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="graph"></div>
+
+  <script>
+
+    Plotly.d3.csv('./product-bar.csv', function(err, rows){
+
+  function unpack(rows, key) {
+  return rows.map(function(row)
+  { return row[key]; });
+}
+
+
+
+class Trace {  // should be based on the measure elements
+  constructor(x, y, name) {
+    this.x = x;
+    this.y = [y];
+    this.name = name;
+    this.type = 'bar';
+  }
+}
+
+// console.log(Trace)
+var measureTime = 'year'
+var measureElementAxe = 'product';
+var measureElement = [  // maybe need to be as the order in the csv
+  'sells',
+  'costs'
+];
+
+var data = [];
+var arrX = [];
+var arrY = [];
+var arrTime = [];
+
+/// get the years
+var arrTime = unpack(rows, measureTime);
+
+// get the first year for the first traces
+var firstTime = arrTime[0] // !!! The years order in the csv should be chronologically
+
+for (var i = 0; i < measureElement.length; i++) {
+    arrX = unpack(rows, measureElementAxe)// create an array for y
+    arrY = unpack(rows, measureElement[i])// create an array for x
+    data[i] = new Trace(
+    arrX[0], arrY[0], measureElement[i]
+    )
+}
+
+console.log(data)
+
+var datA = [];
+/////// create frames and animation ///////
+/// create frames based on years - measureTime var ///
+class Frame {
+  constructor( name, datA) {
+    this.name = name;
+    this.data = datA;
+  }
+}
+
+
+var frames = [];
+var subArray = [];
+for (var i = 0; i < arrTime.length; i++) {
+  
+  for (var j = 0; j < measureElement.length; j++) {
+    arrX = unpack(rows, measureElementAxe)// create an array for y
+    arrY = unpack(rows, measureElement[j])// create an array for x
+    console.log(subArray)
+    datA[j] = new Trace(
+    arrX[0], arrY[j], measureElement[j],
+  )
+};
+  frames[i] = new Frame(
+    arrTime[i],datA,
+  )
+}
+
+console.log(frames)
+
+
+
+// var layout = {barmode: 'group'};
+
+
+// console.log(layout)
+
+// Plotly.newPlot('graph', {
+//   data: data,
+//   layout: layout,
+// });
+
+});
+
+
+
+
+
+
+</script>
+</body>
+
+
+</html>

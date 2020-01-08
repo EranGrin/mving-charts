@@ -67,7 +67,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
   var firstYear = lookup[years[0]];
   var continents = Object.keys(firstYear);
 
-  console.log(continents)
+  //console.log(continents)
   // Create the main traces, one for each continent:
   var traces = [];
   for (i = 0; i < continents.length; i++) {
@@ -90,7 +90,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
         sizeref: 200000
       }
     });
- //console.log(traces)
+ console.log(traces)
   }
 
   // Create a frame for each year. Frames are effectively just
@@ -124,7 +124,6 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
     });
   }
 
-  /// layout start here
   var layout = {
     xaxis: {
       title: 'Life Expectancy',
