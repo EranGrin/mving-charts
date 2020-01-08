@@ -24,7 +24,7 @@
 Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
   // Create a lookup table to sort and regroup the columns of data,
 
-  // first by year, then by continent: // create multi dimantional object then group objects by year 
+  // first by year, then by continent: // create multi dimantional object then group objects by year
   var lookup = {};
 
   function getData(year, continent) {
@@ -32,7 +32,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
     if (!(byYear = lookup[year]))  {;
       byYear = lookup[year] = {};
       console.log(lookup)
-      
+
     }
 	 // If a container for this year + continent doesn't exist yet,
 	 // then create one:
@@ -40,8 +40,8 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
       trace = byYear[continent] = {
         x: [], // lifeExp
         y: [], // gdpPercap
-        id: [], // country 
-        text: [], // country 
+        id: [], // country
+        text: [], // country
         marker: {size: []} // this will create array of the population
       };
      // console.log(trace)
@@ -74,7 +74,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
     var data = firstYear[continents[i]];
 	 // One small note. We're creating a single trace here, to which
 	 // the frames will pass data for the different years. It's
-	 // subtle, but to avoid data reference problems, we'll slice 
+	 // subtle, but to avoid data reference problems, we'll slice
 	 // the arrays to ensure we never write any new data into our
 	 // lookup table:
     traces.push({
@@ -106,7 +106,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
       })
     })
   }
-	
+
   // Now create slider steps, one for each frame. The slider
   // executes a plotly.js API command (here, Plotly.animate).
   // In this example, we'll animate to one of the named frames
@@ -123,7 +123,8 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
       }]
     });
   }
-  
+
+  /// layout start here
   var layout = {
     xaxis: {
       title: 'Life Expectancy',
@@ -182,7 +183,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
       steps: sliderSteps
     }]
   };
-  
+
   // Create the plot:
   Plotly.plot('myDiv', {
     data: traces,
