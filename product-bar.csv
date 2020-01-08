@@ -1,8 +1,4 @@
 product,year,sells,costs
-Product-1,2010,400,200
-Product-1,2011,300,300
+Product-1,2010,500,200
+Product-1,2011,300,100
 Product-1,2012,500,400
-Product-1,2013,400,200
-Product-1,2014,300,300
-Product-1,2015,400,400
-

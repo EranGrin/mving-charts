@@ -55,9 +55,10 @@ var arrTime = [];
 
 /// get the years
 var arrTime = unpack(rows, measureTime);
+console.log(arrTime)
 
 // get the first year for the first traces
-var firstTime = arrTime[0] // !!! The years order in the csv should be chronologically
+// var firstTime = arrTime[0] // !!! The years order in the csv should be chronologically
 
 for (var i = 0; i < measureElement.length; i++) {
     arrX = unpack(rows, measureElementAxe)// create an array for y
@@ -80,36 +81,41 @@ class Frame {
 }
 
 
-var frames = [];
-var subArray = [];
-for (var i = 0; i < arrTime.length; i++) {
+ var frames = [];
+
+for (var i = 0; i < arrTime.length; i++) { 
   
   for (var j = 0; j < measureElement.length; j++) {
-    arrX = unpack(rows, measureElementAxe)// create an array for y
-    arrY = unpack(rows, measureElement[j])// create an array for x
-    console.log(subArray)
+    arRX = unpack(rows, measureElementAxe)// create an array for y
+    arRY = unpack(rows, measureElement[j])// create an array for x
+
+    console.log(arRY[i])
+
     datA[j] = new Trace(
-    arrX[0], arrY[j], measureElement[j],
+    arRX[0], arRY[i], measureElement[j],
   )
 };
+
+
   frames[i] = new Frame(
-    arrTime[i],datA,
+    arrTime, datA,
   )
 }
+
 
 console.log(frames)
 
 
 
-// var layout = {barmode: 'group'};
+ var layout = {barmode: 'group'};
 
 
-// console.log(layout)
+ console.log(layout)
 
-// Plotly.newPlot('graph', {
-//   data: data,
-//   layout: layout,
-// });
+ Plotly.newPlot('graph', {
+   data: data,
+   layout: layout
+ }); 
 
 });
 
