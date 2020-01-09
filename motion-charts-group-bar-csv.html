@@ -89,32 +89,56 @@ class Frame {
  var frames = [];
 var dataNew = [];
 
+// for (var i = 0; i < arrTime.length; i++) {
+//
+//  frames[i] = new Frame(
+//    arrTime[i], datA
+//  )
+// }
+
+
+// function pushDataToFrame(i) {
+// for (var j = 0; j < measureElement.length; j++) {
+//   arRX = unpack(rows, measureElementAxe);// create an array for y
+//   arRY = unpack(rows, measureElement[j]);// create an array for x
+//   datA[j] = new Trace(
+//   arRX[0], arRY[i], measureElement[j]);
+//
+//   }
+//   return datA;
+// }
+
+var dataArr = [];
+
 for (var i = 0; i < arrTime.length; i++) {
 
- frames[i] = new Frame(
-   arrTime[i], pushDataToFrame(i)
- )
-}
+  for (var j = 0; j < measureElement.length; j++) {
+
+      arRX = unpack(rows, measureElementAxe);// create an array for y
+      arRY = unpack(rows, measureElement[j]);// create an array for x
+      console.log(i,j)
+      console.log(arRY)
+      console.log(arRY[i])
+      // dataArr.push(arRY)
+      datA[j] = new Trace(
+      arRX[0],arRY[i] , measureElement[j]);
+      console.log(datA[j])
+      frames[i] = new Frame(
+        arrTime[i], datA
+      )
 
 
-function pushDataToFrame(i) {
-for (var j = 0; j < measureElement.length; j++) {
-  arRX = unpack(rows, measureElementAxe);// create an array for y
-  arRY = unpack(rows, measureElement[j]);// create an array for x
-  datA[j] = new Trace(
-  arRX[0], arRY[i], measureElement[j]);
+    }
+
+
+
 
   }
-  return datA;
-}
 
 
 
 
 
-
-
-console.log(datA)
 
 // console.log(datA)
 console.log(frames)
