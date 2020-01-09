@@ -34,7 +34,7 @@
 class Trace {  // should be based on the measure elements
   constructor(x, y, name) {
     this.x = x;
-    this.y = [y];
+    this.y = y;
     this.name = name;
     this.type = 'bar';
   }
@@ -63,14 +63,18 @@ console.log(arrTime)
 for (var i = 0; i < measureElement.length; i++) {
     arrX = unpack(rows, measureElementAxe)// create an array for y
     arrY = unpack(rows, measureElement[i])// create an array for x
+    console.log(arrY)
     data[i] = new Trace(
     arrX[0], arrY[0], measureElement[i]
     )
 }
 
-console.log(data)
+//console.log(data)
 
-var datA = [];
+// var datA = [];
+var arRX = [];
+var arRY = [];
+
 /////// create frames and animation ///////
 /// create frames based on years - measureTime var ///
 class Frame {
@@ -80,29 +84,39 @@ class Frame {
   }
 }
 
-
+//console.log(unpack(rows, measureElement[0]))
+  var datA = [];
  var frames = [];
+var dataNew = [];
 
-for (var i = 0; i < arrTime.length; i++) { 
-  
-  for (var j = 0; j < measureElement.length; j++) {
-    arRX = unpack(rows, measureElementAxe)// create an array for y
-    arRY = unpack(rows, measureElement[j])// create an array for x
+for (var i = 0; i < arrTime.length; i++) {
 
-    console.log(arRY[i])
-
-    datA[j] = new Trace(
-    arRX[0], arRY[i], measureElement[j],
-  )
-};
-
-
-  frames[i] = new Frame(
-    arrTime, datA,
-  )
+ frames[i] = new Frame(
+   arrTime[i], pushDataToFrame(i)
+ )
 }
 
 
+function pushDataToFrame(i) {
+for (var j = 0; j < measureElement.length; j++) {
+  arRX = unpack(rows, measureElementAxe);// create an array for y
+  arRY = unpack(rows, measureElement[j]);// create an array for x
+  datA[j] = new Trace(
+  arRX[0], arRY[i], measureElement[j]);
+
+  }
+  return datA;
+}
+
+
+
+
+
+
+
+console.log(datA)
+
+// console.log(datA)
 console.log(frames)
 
 
@@ -110,12 +124,12 @@ console.log(frames)
  var layout = {barmode: 'group'};
 
 
- console.log(layout)
+ // console.log(layout)
 
  Plotly.newPlot('graph', {
    data: data,
    layout: layout
- }); 
+ });
 
 });
 
