@@ -110,9 +110,9 @@
       ///// create the sliderSteps objects
       class SliderSteps {
         constructor(method, label, Arg) {
-          this.method = method;
           this.label = label;
-          this.args = Arg
+          this.method = method;
+          this.args = Arg;
         }
       }
 
@@ -131,7 +131,7 @@
         let arg = [];
         arg = new Arg('immediate', {
           duration: 300,
-          redraw: false
+          redraw: false,
         }, {
           duration: 300
         }
@@ -140,81 +140,214 @@
           'animate', arrTime[i], ([
             [arrTime[i]], arg
           ]))
-        console.log(slidStep)
+      }
+
+
+// let Steps = slidStep
+
+console.log(slidStep)
+
+let layout = {
+
+        sliders: [
+            { pad: {
+              t: 20},
+              x: 0.05,
+              len: 0.95,
+              currentvalue: {
+                    xanchor: 'right',
+                    prefix: 'Year: ',
+                    font: {
+                        color: '#888',
+                        size: 30
+                          }
+                        },
+              transition: {
+                  duration: 500
+                },
+
+          // By default, animate commands are bound to the most recently animated frame:
+
+          /////////
+          steps: slidStep
+
+          // [{
+          //   label: '2000', /// label of the changing frame at the momment color but should be year
+          //   method: 'animate',
+          //   args: [
+          //     ['frame1'], {
+          //       mode: 'immediate',
+          //       frame: {
+          //         redraw: false,
+          //         duration: 500
+          //       },
+          //       transition: {
+          //         duration: 500
+          //       }
+          //     }
+          //   ]
+          // }
+          //
+          // , {
+          //   label: '2005',
+          //   method: 'animate',
+          //   args: [
+          //     ['frame2'], {
+          //       mode: 'immediate',
+          //       frame: {
+          //         redraw: false,
+          //         duration: 500
+          //       },
+          //       transition: {
+          //         duration: 500
+          //       }
+          //     }
+          //   ]
+          // }
+          //
+          //
+          // , {
+          //   label: '2010',
+          //   method: 'animate',
+          //   args: [
+          //     ['frame3'], {
+          //       mode: 'immediate',
+          //       frame: {
+          //         redraw: false,
+          //         duration: 500
+          //       },
+          //       transition: {
+          //         duration: 500
+          //       }
+          //     }
+          //   ]
+          // }]
+
+
+        }],
+
+///////////////---  Control Bar ---////////////
+        updatemenus: [{
+          type: 'buttons',
+          showactive: false,
+          x: 0.05,
+          y: 0,
+          xanchor: 'right',
+          yanchor: 'top',
+          direction: 'left',
+          pad: {
+            t: 60,
+            r: 20
+          },
+
+          buttons: [{
+            label: 'Play',
+            method: 'animate',
+            args: [null,
+
+              {
+              fromcurrent: true,
+              frame: {
+                redraw: false,
+                duration: 1000
+              },
+
+              transition: {
+                duration: 500
+              }
+            }]
+          }, {
+            label: 'Pause',
+            method: 'animate',
+            args: [
+              [null], {
+                mode: 'immediate',
+                frame: {
+                  redraw: false,
+                  duration: 0
+                }
+              }
+            ]
+          }]
+        }]
       }
 
 
 
 
-      let layout = {
 
-        xaxis: {
-          title: 'Product',
-          range: [-5, 5]
-        },
 
-        yaxis: {
-          title: 'Sales',
-        },
-        ///////////////---  Control Bar ---////////////
-        updatemenus: [{
-          x: 0,
-          y: 0,
-          yanchor: 'top',
-          xanchor: 'left',
-          showactive: false,
-          direction: 'left',
-          type: 'buttons',
-          pad: {
-            t: 70,
-            r: 2
-          },
-          buttons: [{
-            method: 'animate',
-            args: [null, {
-              mode: 'immediate',
-              fromcurrent: true,
-              transition: {
-                duration: 300
-              },
-              frame: {
-                duration: 500,
-                redraw: false
-              }
-            }],
-            label: 'Play'
-          }, {
-            method: 'animate',
-            args: [
-              [null], {
-                mode: 'immediate',
-                transition: {
-                  duration: 0
-                },
-                frame: {
-                  duration: 0,
-                  redraw: false
-                }
-              }
-            ],
-            label: 'Pause'
-          }]
-        }],
 
-        sliders: [{
-          pad: {l: 130, t: 55},
-          currentvalue: {
-            visible: true,
-            prefix: 'Year:',
-            xanchor: 'right',
-            font: {
-              size: 20,
-              color: '#666'
-            }
-          },
-          steps: slidStep
-        }]
-      };
+
+      // let layout = {
+      //
+      //   xaxis: {
+      //     title: 'Product',
+      //     range: [-5, 5]
+      //   },
+      //
+      //   yaxis: {
+      //     title: 'Sales',
+      //   },
+      //   ///////////////---  Control Bar ---////////////
+      //   updatemenus: [{
+      //     x: 0,
+      //     y: 0,
+      //     yanchor: 'top',
+      //     xanchor: 'left',
+      //     showactive: false,
+      //     direction: 'left',
+      //     type: 'buttons',
+      //     pad: {
+      //       t: 70,
+      //       r: 2
+      //     },
+      //     buttons: [{
+      //       method: 'animate',
+      //       args: [null, {
+      //         mode: 'immediate',
+      //         fromcurrent: true,
+      //         transition: {
+      //           duration: 300
+      //         },
+      //         frame: {
+      //           duration: 500,
+      //           redraw: false
+      //         }
+      //       }],
+      //       label: 'Play'
+      //     }, {
+      //       method: 'animate',
+      //       args: [
+      //         [null], {
+      //           mode: 'immediate',
+      //           transition: {
+      //             duration: 0
+      //           },
+      //           frame: {
+      //             duration: 0,
+      //             redraw: false
+      //           }
+      //         }
+      //       ],
+      //       label: 'Pause'
+      //     }]
+      //   }],
+      //
+      //   sliders: [{
+      //     pad: {l: 130, t: 55},
+      //     currentvalue: {
+      //       visible: true,
+      //       prefix: 'Year:',
+      //       xanchor: 'right',
+      //       font: {
+      //         size: 20,
+      //         color: '#666'
+      //       }
+      //     },
+      //     steps: slidStep
+      //   }]
+      // };
 
 
       // let layout = {
@@ -222,8 +355,8 @@
       //
       //
       // };
-      console.log(layout)
-      console.log(frames)
+      // console.log(layout)
+      // console.log(frames)
 
 
       Plotly.newPlot('graph', {
