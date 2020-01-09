@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<meta charset="utf-8"/>
+<head>
+<script src="https://cdn.plot.ly/plotly-latest.min.js">
+</script>
+<style>
+html,
+body {
+margin: 0;
+padding: 0;
+}
+
+#graph {
+vertical-align: top;
+}
+</style>
+</head>
+
+<body>
+<div id="graph"></div>
+
+<script>
+'use strict'
+
+Plotly.d3.csv('./product-bar.csv', function(err, rows){
+
+function unpack(rows, key) {
+return rows.map(function(row)
+{ return row[key]; });
+}
+
+
+
+class Trace { // should be based on the measure elements
+constructor(x, y, name) {
+this.x = x;
+this.y = y;
+this.name = name;
+this.type = 'bar';
+}
+}
+
+// console.log(Trace)
+let measureTime = 'year'
+let measureElementAxe = 'product';
+let measureElement = [ // maybe need to be as the order in the csv
+'sells',
+'costs'
+];
+
+let data = [];
+let arrX = [];
+let arrY = [];
+
+/// get the years
+let arrTime = unpack(rows, measureTime);
+console.log(arrTime)
+
+// get the first year for the first traces
+// let firstTime = arrTime[0] // !!! The years order in the csv should be chronologically
+
+for (let i = 0; i < measureElement.length; i++) {
+arrX = unpack(rows, measureElementAxe)// create an array for y
+arrY = unpack(rows, measureElement[i])// create an array for x
+console.log(arrY)
+data[i] = new Trace(
+arrX[0], arrY[0], measureElement[i]
+)
+}
+
+//console.log(data)
+
+// let datA = [];
+let arRX = [];
+let arRY = [];
+
+/////// create frames and animation ///////
+/// create frames based on years - measureTime let ///
+class Frame {
+constructor( name, datA) {
+this.name = name;
+this.data = datA;
+}
+}
+
+//console.log(unpack(rows, measureElement[0]))
+// let datA = [];
+let frames = [];
+let dataNew = [];
+
+// for (let i = 0; i < arrTime.length; i++) {
+//
+// frames[i] = new Frame(
+// arrTime[i], datA
+// )
+// }
+
+
+// function pushDataToFrame(i) {
+// for (let j = 0; j < measureElement.length; j++) {
+// arRX = unpack(rows, measureElementAxe);// create an array for y
+// arRY = unpack(rows, measureElement[j]);// create an array for x
+// datA[j] = new Trace(
+// arRX[0], arRY[i], measureElement[j]);
+//
+// }
+// return datA;
+// }
+
+let dataArr = [];
+
+for (let i = 0; i < arrTime.length; i++) {
+let datA = []
+for (let j = 0; j < measureElement.length; j++) {
+
+arRX = unpack(rows, measureElementAxe);// create an array for y
+arRY = unpack(rows, measureElement[j]);// create an array for x
+console.log(i,j)
+//console.log(arRX)
+//console.log(arRY)
+console.log(arRY[i])
+// dataArr.push(arRY)
+
+datA[j] = new Trace(
+arRX[0], arRY[i] , measureElement[j]);
+console.log(datA)
+//console.log(arRY[i])
+
+frames[i] = new Frame(
+arrTime[i], datA
+)
+
+
+}
+
+
+
+
+}
+
+
+
+
+
+
+// console.log(datA)
+console.log(frames)
+
+
+
+let layout = {barmode: 'group'};
+
+
+// console.log(layout)
+
+Plotly.newPlot('graph', {
+data: data,
+layout: layout
+});
+
+});
+
+
+
+
+
+
+</script>
+</body>
+
+
+</html>
