@@ -118,11 +118,13 @@ for (var i = 0; i < arrTime.length; i++) {
       arRY = unpack(rows, measureElement[j]);// create an array for x
       console.log(i,j)
       console.log(arRY)
-      console.log(arRY[i])
+      //console.log(arRY[i])
       // dataArr.push(arRY)
       datA[j] = new Trace(
-      arRX[0],arRY[i] , measureElement[j]);
-      console.log(datA[j])
+      arRX[0], arRY[i] , measureElement[j]);
+      console.log(datA)
+      console.log(arRY[i])
+
       frames[i] = new Frame(
         arrTime[i], datA
       )
