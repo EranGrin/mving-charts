@@ -31,7 +31,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
     var byYear, trace;
     if (!(byYear = lookup[year]))  {;
       byYear = lookup[year] = {};
-      console.log(lookup)
+      // console.log(lookup)
 
     }
 	 // If a container for this year + continent doesn't exist yet,
@@ -90,7 +90,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
         sizeref: 200000
       }
     });
- console.log(traces)
+ //console.log(traces)
   }
 
   // Create a frame for each year. Frames are effectively just
@@ -123,7 +123,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
       }]
     });
   }
-
+ console.log(sliderSteps)
   var layout = {
     xaxis: {
       title: 'Life Expectancy',
@@ -149,7 +149,7 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
       showactive: false,
       direction: 'left',
       type: 'buttons',
-      pad: {t: 87, r: 10},
+      pad: {t: 90, r: 10},
       buttons: [{
         method: 'animate',
         args: [null, {
@@ -183,12 +183,14 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
     }]
   };
 
+  console.log(frames)
+
   // Create the plot:
   Plotly.plot('myDiv', {
     data: traces,
     layout: layout,
 	 config: {showSendToCloud:true},
-    frames: frames,
+    // frames: frames,
   });
 });
   </script>
