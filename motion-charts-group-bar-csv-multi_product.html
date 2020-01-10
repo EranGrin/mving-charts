@@ -55,11 +55,11 @@
         // usage example:
         let a = arrTime;
         let uniqueYear = a.filter( onlyUnique ); // returns ['a', 1, 2, '1']
-        console.log(uniqueYear)
+
 
          arrX = unpack(rows, measureElementAxe);
         let uniqueProduct = arrX.filter( onlyUnique ); // returns ['a', 1, 2, '1']
-        console.log(uniqueProduct)
+
 
 
         let yearsKeyCollection = {}
@@ -68,49 +68,91 @@
           for (let j = 0; j < arrTime.length; j++){
             if (arrTime[j] == uniqueYear[i]){
               yearsKeyCollection[i].push(j)
-            } 
-          }
-        }
-        console.log(yearsKeyCollection)
-
-
-
-
-
-
-
-
-        let prodcutsKeyCollection = {}
-        for (let i = 0; i < uniqueProduct.length; i++){
-          prodcutsKeyCollection[i] = []
-          for (let j = 0; j < arrX.length; j++){
-            if (arrX[j] == uniqueProduct[i]){
-              prodcutsKeyCollection[i].push(j)
-            } 
-          }
-        }
-        console.log(prodcutsKeyCollection)
-
-
-    /*       function valuesByYear(year, prodcut){
-            for (let i = 0; i < yearsKeyCollection.length; i++){
-              if (yearsKeyCollection[i] == year ){
-                val = yearsKeyCollection[i].key
-                for (let i = 0; i < yearsKeyCollection.length; i++)
-              }
-
-
             }
           }
-
- */
-
-        	/// get 
-        for (let i = 0; i < yearsKeyCollection.length; i++){
-
-
-
         }
+
+        var lookup = {};
+
+        function getData(year, product) {
+          var byYear, trace;
+          if (!(byYear = lookup[year]))  {;
+            byYear = lookup[year] = {};
+
+          }
+      	 // If a container for this year + product doesn't exist yet,
+      	 // then create one
+          if (!(trace = byYear[product])) {
+            trace = byYear[product] =
+              {
+              x: [],
+              y: [],
+              id: [],
+              text: [],
+            };
+          }
+          return trace;
+        }
+
+        // Go through each row and append the data
+
+        for (var i = 0; i < rows.length; i++) {
+          var datum = rows[i];
+          // console.log(datum)
+
+          var trace = getData(datum.year, datum.product);
+          trace.text.push(datum.sells);
+          trace.id.push(datum.sells);
+          trace.x.push(datum.product);
+          trace.y.push(datum.sells);
+          trace.y.push(datum.costs);
+          // trace.y.push(datum.costs);
+
+
+      }
+        console.log(lookup)
+
+        // Get the group names:
+        var years = Object.keys(lookup);
+        // In this case, every year includes every product, so we
+        // can just infer the from the *first* year:
+        var firstYear = lookup[years[0]];
+        var products = Object.keys(firstYear);
+
+
+        // Create the main traces for data
+        var traces = [];
+        for (i = 0; i < products.length; i++) {
+          var data = firstYear[products[i]];
+
+          traces.push({
+            name: products[i],
+            x: products,
+            y: data.y.slice(),
+            id: data.id.slice(),
+            text: data.text.slice(),
+            type: 'bar',
+
+          });
+        }
+      console.log(traces)
+
+
+
+
+
+        // let prodcutsKeyCollection = {}
+        // for (let i = 0; i < uniqueProduct.length; i++){
+        //   prodcutsKeyCollection[i] = []
+        //   for (let j = 0; j < arrX.length; j++){
+        //     if (arrX[j] == uniqueProduct[i]){
+        //       prodcutsKeyCollection[i].push(j)
+        //     }
+        //   }
+        // }
+        // console.log(prodcutsKeyCollection)
+
+
 
         class Trace { // should be based on the measure elements
           constructor(x, y, name) {
@@ -142,23 +184,21 @@
         //   var data = [trace1, trace2];
 
 
-    let data = {};
-    for (let j = 0; j < uniqueProduct.length; j++) { 
-      let dataInner = [];
-       data[j] = dataInner;
-      for (let i = 0; i < measureElement.length; i++) {
-       
-  	      arrY = unpack(rows, measureElement[i]) 
+  //   let data = {};
+  //   for (let j = 0; j < uniqueProduct.length; j++) {
+  //     let dataInner = [];
+  //      data[j] = dataInner;
+  //     for (let i = 0; i < measureElement.length; i++) {
+  //
+  // 	      arrY = unpack(rows, measureElement[i])
+  //
+  //         // arrY = arrY.slice(0, 2)
+  //           dataInner[i] = new Trace(
+  //            uniqueProduct[j], arrY[j], measureElement[i]);
+  //       }
+  //
+  //   }
 
-          // arrY = arrY.slice(0, 2)
-            dataInner[i] = new Trace(
-             uniqueProduct[j], arrY[j], measureElement[i]);
-        }
-
-    }
-       
-
-  console.log(data)
 
 
 
@@ -194,23 +234,9 @@
           data: datA
            }
 
-        // frames[i] = new Frame(
-        //   arrTime[i], datA
-        // );
+
       }
-      // console.log(datA)
-      // console.log(frames)
 
-
-
-      // ///// create the sliderSteps objects
-      // class SliderSteps {
-      //   constructor(method, label, Arg) {
-      //     this.label = label;
-      //     this.method = method;
-      //     this.args = Arg;
-      //   }
-      // }
 
       class Arg {
         constructor(mode, frame, transition) {
@@ -318,7 +344,7 @@ let layout = {
 
 
       Plotly.newPlot('graph', {
-        data: data,
+        data: traces,
         layout: layout,
         frames: frames,
         showSendToCloud:true
