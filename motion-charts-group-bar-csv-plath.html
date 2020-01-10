@@ -78,13 +78,19 @@
 
       /////// create frames and animation ///////
       /// create frames based on years - measureTime let ///
+
       class Frame {
         constructor(name, datA) {
           this.name = name;
           this.data = datA;
+
+          // Object.defineProperty(Frame, "name", {
+          //   value: "test"
+          // });
         }
       };
 
+      Frame.prototype.constructor = 'test'
 
       let frames = [];
 
@@ -100,6 +106,7 @@
             arRX[0], arRY[i], measureElement[j]);
           // console.log(datA)
         };
+
         frames[i] = new Frame(
           arrTime[i], datA
         );
@@ -110,9 +117,9 @@
       ///// create the sliderSteps objects
       class SliderSteps {
         constructor(method, label, Arg) {
-          this.label = label;
           this.method = method;
-          this.args = Arg;
+          this.label = label;
+          this.args = Arg
         }
       }
 
@@ -131,7 +138,7 @@
         let arg = [];
         arg = new Arg('immediate', {
           duration: 300,
-          redraw: false,
+          redraw: false
         }, {
           duration: 300
         }
@@ -144,8 +151,12 @@
 
 
 // let Steps = slidStep
+// delete frames[0].constructor.name;
 
-console.log(slidStep)
+
+Frame.prototype.constructor = 'test'
+console.log(frames.constructor.name)
+console.log(frames[0].constructor.name)
 
 let layout = {
 

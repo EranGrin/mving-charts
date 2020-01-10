@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<meta charset="utf-8" />
+
+<head>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #graph {
+      vertical-align: top;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="graph"></div>
+
+  <script>
+    'use strict'
+
+    Plotly.d3.csv('./product-bar-multi-Product.csv', function(err, rows) {
+
+      function unpack(rows, key) {
+        return rows.map(function(row) {
+          return row[key];
+        });
+      }
+
+      // declare variables for the csv columns
+      let measureTime = 'year'
+      let measureElementAxe = 'product';
+      let measureElement = [ // maybe need to be as the order in the csv
+        'sells',
+        'costs'
+      ];
+
+
+      let arrX = [];
+      let arrY = [];
+
+      /// get the years
+      let arrTime = unpack(rows, measureTime);
+
+      function onlyUnique(value, index, self) {
+          return self.indexOf(value) === index;
+      }
+        // usage example:
+        let a = arrTime;
+        let uniqueYear = a.filter( onlyUnique ); // returns ['a', 1, 2, '1']
+        console.log(uniqueYear)
+
+        let b = unpack(rows, measureElementAxe);
+        let uniqueProduct = b.filter( onlyUnique ); // returns ['a', 1, 2, '1']
+        console.log(uniqueProduct)
+
+
+        //
+        // 1. get a list of all years based on group by of the year values
+        // 2. iterate over the year array number and fetch product
+        // 3. call the product value related to each year
+
+
+        class Trace { // should be based on the measure elements
+          constructor(x, y, name) {
+            this.x = x;
+            this.y = y;
+            this.name = name;
+            this.type = 'bar';
+            //this.mode = 'bar';
+            this.id = y;
+            // this.text = y;
+          }
+        }
+
+
+        // var trace1 = {
+        //   x: ['p1', 'p2'],
+        //     y: [3, 4],
+        //     name: 'Sells',
+        //     type: 'bar'
+        //   };
+        //
+        //   var trace2 = {
+        //     x: ['p1', 'p2'],
+        //     y: [1, 3],
+        //     name: 'Costs',
+        //     type: 'bar'
+        //   };
+        //
+        //   var data = [trace1, trace2];
+
+let data = [];
+        for (let i = 0; i < uniqueProduct.length; i++){
+        arrX = unpack(rows, measureElementAxe) // create an array for y
+        arrY = unpack(rows, measureElement[i]) // create an array for x
+        // arrY = arrY.slice(0, 2)
+        data[i] = new Trace(
+        uniqueProduct, arrY[i], measureElement[i]);
+    }
+
+
+
+  console.log(data)
+
+
+
+      let arRX = [];
+      let arRY = [];
+
+
+      /////// create frames and animation ///////
+      /// create frames based on years - measureTime let ///
+      class Frame {
+        constructor(name, datA) {
+          this.name = name;
+          this.data = datA;
+        }
+      };
+
+      let frames = [];
+      for (let i = 0; i < uniqueYear.length; i++) {
+        let datA = [];
+        for (let j = 0; j < measureElement.length; j++) {
+
+          arRX = unpack(rows, measureElementAxe); // create an array for y
+          arRY = unpack(rows, measureElement[j]); // create an array for x
+          // console.log(i, j)
+          // console.log(arRY[i])
+          datA[j] = new Trace(
+            arRX[0], arRY[i], measureElement[j]);
+          // console.log(datA)
+        };
+        frames[i] =
+          {
+          name: uniqueYear[i],
+          data: datA
+           }
+
+        // frames[i] = new Frame(
+        //   arrTime[i], datA
+        // );
+      }
+      // console.log(datA)
+      // console.log(frames)
+
+
+
+      // ///// create the sliderSteps objects
+      // class SliderSteps {
+      //   constructor(method, label, Arg) {
+      //     this.label = label;
+      //     this.method = method;
+      //     this.args = Arg;
+      //   }
+      // }
+
+      class Arg {
+        constructor(mode, frame, transition) {
+          this.mode = mode;
+          this.frame = frame;
+          this.transition = transition;
+        }
+      }
+
+
+
+      let slidStep = [];
+      for (let i = 0; i < uniqueYear.length; i++) {
+        let arg = [];
+        arg = new Arg('immediate', {
+          duration: 300,
+          redraw: false,
+        }, {
+          duration: 300
+        }
+      )
+        slidStep[i] = {
+            label: uniqueYear[i], /// label of the changing frame at the momment color but should be year
+            method: 'animate',
+            args: [
+              [uniqueYear[i]], arg
+            ]
+          }
+      }
+
+
+// let Steps = slidStep
+
+// console.log(slidStep)
+
+let layout = {
+
+        sliders: [
+            { pad: {
+              t: 20},
+              x: 0.05,
+              len: 0.95,
+              currentvalue: {
+                    xanchor: 'right',
+                    prefix: 'Year: ',
+                    font: {
+                        color: '#888',
+                        size: 30
+                          }
+                        },
+              transition: {
+                  duration: 500
+                },
+          steps: slidStep
+        }],
+
+////   ---  Control Bar ---    ////
+        updatemenus: [{
+          type: 'buttons',
+          showactive: false,
+          x: 0.05,
+          y: 0,
+          xanchor: 'right',
+          yanchor: 'top',
+          direction: 'left',
+          pad: {
+            t: 60,
+            r: 20
+          },
+
+          buttons: [{
+            label: 'Play',
+            method: 'animate',
+            args: [null,
+
+              {
+              fromcurrent: true,
+              frame: {
+                redraw: false,
+                duration: 1000
+              },
+
+              transition: {
+                duration: 500
+              }
+            }]
+          }, {
+            label: 'Pause',
+            method: 'animate',
+            args: [
+              [null], {
+                mode: 'immediate',
+                frame: {
+                  redraw: false,
+                  duration: 0
+                }
+              }
+            ]
+          }]
+        }]
+      };
+
+
+
+
+
+      Plotly.newPlot('graph', {
+        data: data,
+        layout: layout,
+        frames: frames,
+        showSendToCloud:true
+
+      });
+    });
+  </script>
+</body>
+
+
+</html>

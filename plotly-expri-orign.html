@@ -31,8 +31,8 @@ Plotly.d3.csv('./gapminderDataFiveYear.csv', function (err, data) {
     var byYear, trace;
     if (!(byYear = lookup[year]))  {;
       byYear = lookup[year] = {};
-      // console.log(lookup)
-
+      console.log(lookup)
+      console.log(byYear)
     }
 	 // If a container for this year + continent doesn't exist yet,
 	 // then create one:
