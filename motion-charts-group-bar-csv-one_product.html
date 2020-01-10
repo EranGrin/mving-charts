@@ -31,21 +31,37 @@
         return rows.map(function(row) {
           return row[key];
         });
-      }
-
+///------ Objects Classes -----///
       class Trace { // should be based on the measure elements
         constructor(x, y, name) {
           this.x = [x];
           this.y = [y];
           this.name = name;
           this.type = 'bar';
-          //this.mode = 'bar';
           this.id = y;
-          // this.text = y;
         }
-      }
+      };
 
-      // declare variables for the columns
+      class Frame {
+        constructor(name, datA) {
+          this.name = name;
+          this.data = datA;
+        }
+      };
+
+      class Arg {
+        constructor(mode, frame, transition) {
+          this.mode = mode;
+          this.frame = frame;
+          this.transition = transition;
+        }
+      };
+
+
+
+
+
+      /// declare variables for the columns
       let measureTime = 'year'
       let measureElementAxe = 'product';
       let measureElement = [ // maybe need to be as the order in the csv
@@ -58,9 +74,11 @@
       let arrX = [];
       let arrY = [];
 
+///----- data component -----///
+
       /// get the years
       let arrTime = unpack(rows, measureTime);
-
+      /// create traces for data component
       for (let i = 0; i < measureElement.length; i++) {
         arrX = unpack(rows, measureElementAxe) // create an array for y
         arrY = unpack(rows, measureElement[i]) // create an array for x
@@ -70,66 +88,26 @@
       }
 
 
+      /// create frames and animation  ///
+      /// create frames based on years - measureTime let  ///
+      let frames = [];
       let arRX = [];
       let arRY = [];
-
-
-      /////// create frames and animation ///////
-      /// create frames based on years - measureTime let ///
-      class Frame {
-        constructor(name, datA) {
-          this.name = name;
-          this.data = datA;
-        }
-      };
-
-      let frames = [];
-
       for (let i = 0; i < arrTime.length; i++) {
         let datA = [];
         for (let j = 0; j < measureElement.length; j++) {
-
-          arRX = unpack(rows, measureElementAxe); // create an array for y
-          arRY = unpack(rows, measureElement[j]); // create an array for x
-          // console.log(i, j)
-          // console.log(arRY[i])
+          arRX = unpack(rows, measureElementAxe); // create an array for y frames
+          arRY = unpack(rows, measureElement[j]); // create an array for x frames
           datA[j] = new Trace(
             arRX[0], arRY[i], measureElement[j]);
-          // console.log(datA)
         };
+
         frames[i] =
           {
           name: arrTime[i],
           data: datA
            }
-
-        // frames[i] = new Frame(
-        //   arrTime[i], datA
-        // );
       }
-      // console.log(datA)
-      console.log(frames)
-
-
-
-      // ///// create the sliderSteps objects
-      // class SliderSteps {
-      //   constructor(method, label, Arg) {
-      //     this.label = label;
-      //     this.method = method;
-      //     this.args = Arg;
-      //   }
-      // }
-
-      class Arg {
-        constructor(mode, frame, transition) {
-          this.mode = mode;
-          this.frame = frame;
-          this.transition = transition;
-        }
-      }
-
-
 
       let slidStep = [];
       for (let i = 0; i < arrTime.length; i++) {
@@ -142,7 +120,7 @@
         }
       )
         slidStep[i] = {
-            label: arrTime[i], /// label of the changing frame at the momment color but should be year
+            label: arrTime[i], 
             method: 'animate',
             args: [
               [arrTime[i]], arg
@@ -150,13 +128,8 @@
           }
       }
 
-
-// let Steps = slidStep
-
-console.log(slidStep)
-
+///----- layout component -----///
 let layout = {
-
         sliders: [
             { pad: {
               t: 20},
@@ -176,7 +149,7 @@ let layout = {
           steps: slidStep
         }],
 
-///////////////---  Control Bar ---////////////
+//------  Control Bar ------//
         updatemenus: [{
           type: 'buttons',
           showactive: false,
@@ -193,15 +166,12 @@ let layout = {
           buttons: [{
             label: 'Play',
             method: 'animate',
-            args: [null,
-
-              {
+            args: [null,{
               fromcurrent: true,
               frame: {
                 redraw: false,
                 duration: 1000
               },
-
               transition: {
                 duration: 500
               }
@@ -222,10 +192,6 @@ let layout = {
         }]
       };
 
-
-
-
-
       Plotly.newPlot('graph', {
         data: data,
         layout: layout,
@@ -234,8 +200,7 @@ let layout = {
 
       });
     });
+
   </script>
 </body>
-
-
 </html>

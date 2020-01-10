@@ -57,16 +57,60 @@
         let uniqueYear = a.filter( onlyUnique ); // returns ['a', 1, 2, '1']
         console.log(uniqueYear)
 
-        let b = unpack(rows, measureElementAxe);
-        let uniqueProduct = b.filter( onlyUnique ); // returns ['a', 1, 2, '1']
+         arrX = unpack(rows, measureElementAxe);
+        let uniqueProduct = arrX.filter( onlyUnique ); // returns ['a', 1, 2, '1']
         console.log(uniqueProduct)
 
 
-        //
-        // 1. get a list of all years based on group by of the year values
-        // 2. iterate over the year array number and fetch product
-        // 3. call the product value related to each year
+        let yearsKeyCollection = {}
+        for (let i = 0; i < uniqueYear.length; i++){
+          yearsKeyCollection[i] = []
+          for (let j = 0; j < arrTime.length; j++){
+            if (arrTime[j] == uniqueYear[i]){
+              yearsKeyCollection[i].push(j)
+            } 
+          }
+        }
+        console.log(yearsKeyCollection)
 
+
+
+
+
+
+
+
+        let prodcutsKeyCollection = {}
+        for (let i = 0; i < uniqueProduct.length; i++){
+          prodcutsKeyCollection[i] = []
+          for (let j = 0; j < arrX.length; j++){
+            if (arrX[j] == uniqueProduct[i]){
+              prodcutsKeyCollection[i].push(j)
+            } 
+          }
+        }
+        console.log(prodcutsKeyCollection)
+
+
+    /*       function valuesByYear(year, prodcut){
+            for (let i = 0; i < yearsKeyCollection.length; i++){
+              if (yearsKeyCollection[i] == year ){
+                val = yearsKeyCollection[i].key
+                for (let i = 0; i < yearsKeyCollection.length; i++)
+              }
+
+
+            }
+          }
+
+ */
+
+        	/// get 
+        for (let i = 0; i < yearsKeyCollection.length; i++){
+
+
+
+        }
 
         class Trace { // should be based on the measure elements
           constructor(x, y, name) {
@@ -97,16 +141,22 @@
         //
         //   var data = [trace1, trace2];
 
-let data = [];
-        for (let i = 0; i < uniqueProduct.length; i++){
-        arrX = unpack(rows, measureElementAxe) // create an array for y
-        arrY = unpack(rows, measureElement[i]) // create an array for x
-        // arrY = arrY.slice(0, 2)
-        data[i] = new Trace(
-        uniqueProduct, arrY[i], measureElement[i]);
+
+    let data = {};
+    for (let j = 0; j < uniqueProduct.length; j++) { 
+      let dataInner = [];
+       data[j] = dataInner;
+      for (let i = 0; i < measureElement.length; i++) {
+       
+  	      arrY = unpack(rows, measureElement[i]) 
+
+          // arrY = arrY.slice(0, 2)
+            dataInner[i] = new Trace(
+             uniqueProduct[j], arrY[j], measureElement[i]);
+        }
+
     }
-
-
+       
 
   console.log(data)
 
