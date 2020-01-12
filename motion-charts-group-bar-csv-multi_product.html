@@ -39,7 +39,8 @@
       let measureElementAxe = 'product';
       let measureElement = [ // maybe need to be as the order in the csv
         'sells',
-        'costs'
+        'costs',
+        'margin'
       ];
 
 
@@ -71,19 +72,19 @@
             }
           }
         }
+//////////////////////////////////////////////////////////
 
         var lookup = {};
-
-        function getData(year, product) {
+        function getData(year, measureElement) {
           var byYear, trace;
-          if (!(byYear = lookup[year]))  {;
+          if (!(byYear = lookup[year]))  {
             byYear = lookup[year] = {};
 
-          }
+          };
       	 // If a container for this year + product doesn't exist yet,
       	 // then create one
-          if (!(trace = byYear[product])) {
-            trace = byYear[product] =
+          if (!(trace = byYear[measureElement])) {
+            trace = byYear[measureElement] =
               {
               x: [],
               y: [],
@@ -98,36 +99,40 @@
 
         for (var i = 0; i < rows.length; i++) {
           var datum = rows[i];
-          // console.log(datum)
+        console.log(datum)
+          for (var j = 0; j < measureElement.length; j++) {
 
-          var trace = getData(datum.year, datum.product);
-          trace.text.push(datum.sells);
-          trace.id.push(datum.sells);
+          var trace = getData(datum.year, measureElement[j]);
+
+          // trace.text.push(datum.sells);
+          // trace.id.push(datum.sells);
           trace.x.push(datum.product);
-          trace.y.push(datum.sells);
-          trace.y.push(datum.costs);
+          trace.y.push(datum[measureElement[j]]);
           // trace.y.push(datum.costs);
 
-
+        }
       }
         console.log(lookup)
 
         // Get the group names:
         var years = Object.keys(lookup);
+
+        console.log(years)
+        // console.log(lookup[years[0]])
         // In this case, every year includes every product, so we
         // can just infer the from the *first* year:
         var firstYear = lookup[years[0]];
-        var products = Object.keys(firstYear);
+        var measureElementS = Object.keys(firstYear);
 
 
         // Create the main traces for data
         var traces = [];
-        for (i = 0; i < products.length; i++) {
-          var data = firstYear[products[i]];
+        for (i = 0; i < measureElementS.length; i++) {
+          var data = firstYear[measureElementS[i]];
 
           traces.push({
-            name: products[i],
-            x: products,
+            name: measureElementS[i],
+            x: data.x.slice(),
             y: data.y.slice(),
             id: data.id.slice(),
             text: data.text.slice(),
@@ -135,8 +140,36 @@
 
           });
         }
-      console.log(traces)
 
+
+        var frames = [];
+        for (i = 0; i < years.length; i++) {
+          frames.push({
+            name: years[i],
+            data: measureElementS.map(function (measureElement) {
+              return getData(years[i], measureElement);
+            })
+          })
+        }
+
+
+
+        // Now create slider steps, one for each frame. The slider
+        // executes a plotly.js API command (here, Plotly.animate).
+        // In this example, we'll animate to one of the named frames
+        // created in the above loop.
+        var sliderSteps = [];
+        for (i = 0; i < years.length; i++) {
+          sliderSteps.push({
+            method: 'animate',
+            label: years[i],
+            args: [[years[i]], {
+              mode: 'immediate',
+              transition: {duration: 300},
+              frame: {duration: 300, redraw: false},
+            }]
+          });
+        }
 
 
 
@@ -208,34 +241,34 @@
 
       /////// create frames and animation ///////
       /// create frames based on years - measureTime let ///
-      class Frame {
-        constructor(name, datA) {
-          this.name = name;
-          this.data = datA;
-        }
-      };
-
-      let frames = [];
-      for (let i = 0; i < uniqueYear.length; i++) {
-        let datA = [];
-        for (let j = 0; j < measureElement.length; j++) {
-
-          arRX = unpack(rows, measureElementAxe); // create an array for y
-          arRY = unpack(rows, measureElement[j]); // create an array for x
-          // console.log(i, j)
-          // console.log(arRY[i])
-          datA[j] = new Trace(
-            arRX[0], arRY[i], measureElement[j]);
-          // console.log(datA)
-        };
-        frames[i] =
-          {
-          name: uniqueYear[i],
-          data: datA
-           }
-
-
-      }
+      // class Frame {
+      //   constructor(name, datA) {
+      //     this.name = name;
+      //     this.data = datA;
+      //   }
+      // };
+      //
+      // let frames = [];
+      // for (let i = 0; i < uniqueYear.length; i++) {
+      //   let datA = [];
+      //   for (let j = 0; j < measureElement.length; j++) {
+      //
+      //     arRX = unpack(rows, measureElementAxe); // create an array for y
+      //     arRY = unpack(rows, measureElement[j]); // create an array for x
+      //     // console.log(i, j)
+      //     // console.log(arRY[i])
+      //     datA[j] = new Trace(
+      //       arRX[0], arRY[i], measureElement[j]);
+      //     // console.log(datA)
+      //   };
+      //   frames[i] =
+      //     {
+      //     name: uniqueYear[i],
+      //     data: datA
+      //      }
+      //
+      //
+      // }
 
 
       class Arg {

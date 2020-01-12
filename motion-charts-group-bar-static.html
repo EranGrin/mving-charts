@@ -22,22 +22,22 @@
 
   <script>
 
-
     var trace1 = {
-      x: ['p1', 'p2'],
-        y: [3, 4],
+      x: ['p1', 'p2', 'p3'],
+        y: [3, 4, 2],
         name: 'Sells',
         type: 'bar'
       };
 
       var trace2 = {
-        x: ['p1', 'p2'],
-        y: [1, 3],
+        x: ['p1', 'p2', 'p3'],
+        y: [1, 3, 4],
         name: 'Costs',
         type: 'bar'
       };
 
       var data = [trace1, trace2];
+      console.log(data)
     Plotly.newPlot('graph',  { data,
 
 
